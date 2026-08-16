@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>FB Bench</title>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0E1613;color:#E8EDE9;
+       font-family:-apple-system,"Segoe UI",system-ui,sans-serif}
+  .c{text-align:center;padding:2rem}
+  .p{width:34px;height:34px;border:3px solid rgba(232,237,233,.2);border-top-color:#3FB37A;
+     border-radius:50%;margin:0 auto 1.1rem;animation:g .8s linear infinite}
+  @keyframes g{to{transform:rotate(360deg)}}
+  a{color:#3FB37A}
+  .err{display:none;font-size:.9rem;color:#93A39A;max-width:34ch;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="p"></div>
+  <p>Abrindo o FB Bench…</p>
+  <p class="err" id="err">Não consegui abrir agora. A plataforma pode estar reiniciando —
+     tente de novo em um minuto.</p>
+</div>
+<script>
+(async () => {
+  try {
+    const r = await fetch('atual.json?ts=' + Date.now(), {cache:'no-store'});
+    const j = await r.json();
+    if (j && /^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(j.url)) {
+      location.replace(j.url);
+      return;
+    }
+    throw new Error('ponteiro inválido');
+  } catch (e) {
+    document.getElementById('err').style.display = 'block';
+    setTimeout(() => location.reload(), 20000);
+  }
+})();
+</script>
+</body>
+</html>
